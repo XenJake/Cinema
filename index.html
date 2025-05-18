@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Famous TV & Movie Recipes</title>
+  <style>
+    :root {
+      --bg: #fff4ec;
+      --card-bg: #fff;
+      --text: #333;
+      --primary: #ff6b6b;
+    }
+
+    [data-theme="dark"] {
+      --bg: #121212;
+      --card-bg: #1e1e1e;
+      --text: #f5f5f5;
+      --primary: #ff6b6b;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      background: var(--primary);
+      padding: 1.5rem;
+      text-align: center;
+      color: white;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 2rem;
+    }
+
+    .search-bar {
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .search-bar input {
+      padding: 0.6rem;
+      font-size: 1rem;
+      flex: 1;
+      margin-right: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .toggle {
+      background: #333;
+      color: white;
+      border: none;
+      padding: 0.6rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .recipes {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .card-body {
+      padding: 1rem;
+    }
+
+    .card-body h3 {
+      margin-bottom: 0.5rem;
+    }
+
+    .card-body p {
+      font-size: 0.95rem;
+    }
+
+    .card-body ul {
+      padding-left: 1rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      background: #222;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Famous TV & Movie Recipes</h1>
+    <p>Cook your favorite dishes from your favorite shows and films</p>
+  </header>
+
+  <div class="container">
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search for a recipe...">
+      <button class="toggle" onclick="toggleTheme()">Toggle Theme</button>
+    </div>
+    <div class="recipes" id="recipeList"></div>
+  </div>
+
+  <footer>
+    &copy; 2025 Quantum Core | Recipe App
+  </footer>
+
+  <script>
+    const recipes = [
+      {
+        name: "Goku's Ramen Bowl (Dragon Ball)",
+        image: "https://i.imgur.com/w2EtCk2.jpg",
+        ingredients: ["Ramen noodles", "Broth", "Boiled egg", "Pork belly", "Scallions", "Soy sauce"],
+        instructions: "Cook noodles. Simmer broth with soy sauce. Add toppings. Serve hot like Goku!"
+      },
+      {
+        name: "Chilli Dog (Sonic)",
+        image: "https://i.imgur.com/JXzRpUm.jpg",
+        ingredients: ["Hot dog buns", "Sausages", "Beef chili", "Cheddar", "Onions", "Mustard"],
+        instructions: "Grill sausages. Prepare chili. Assemble in bun and top with cheese and onions."
+      },
+      {
+        name: "Steven's Together Breakfast (Steven Universe)",
+        image: "https://i.imgur.com/nKjcqUe.jpg",
+        ingredients: ["Waffles", "Whipped cream", "Strawberries", "Maple syrup", "Popcorn"],
+        instructions: "Stack waffles, layer whipped cream and fruit, drizzle syrup, and sprinkle popcorn."
+      },
+      {
+        name: "Lava Chicken (Minecraft Style)",
+        image: "https://i.imgur.com/Yl9mZVE.jpg",
+        ingredients: ["Chicken breast", "Cayenne pepper", "Paprika", "Garlic", "Oil"],
+        instructions: "Marinate chicken in spices. Cook until spicy and red like lava."
+      },
+      {
+        name: "Donuts (The Simpsons)",
+        image: "https://i.imgur.com/5rGZfke.jpg",
+        ingredients: ["Flour", "Sugar", "Yeast", "Eggs", "Milk", "Glaze", "Sprinkles"],
+        instructions: "Prepare dough, fry until golden, glaze and decorate with sprinkles."
+      },
+      {
+        name: "Ice Bear's Pancakes (We Bare Bears)",
+        image: "https://i.imgur.com/jH29oJz.jpg",
+        ingredients: ["Pancake mix", "Milk", "Eggs", "Butter", "Maple syrup"],
+        instructions: "Mix batter, cook pancakes, and top with butter and syrup like Ice Bear would."
+      },
+      {
+        name: "Krabby Patty (SpongeBob SquarePants)",
+        image: "https://i.imgur.com/NK9xAGj.jpg",
+        ingredients: ["Bun", "Lettuce", "Tomato", "Pickle", "Patty", "Secret sauce"],
+        instructions: "Grill patty, stack ingredients carefully, and add secret sauce (ketchup + mayo)."
+      },
+      {
+        name: "Ratatouille (Ratatouille Movie)",
+        image: "https://i.imgur.com/M07tvTJ.jpg",
+        ingredients: ["Eggplant", "Zucchini", "Tomatoes", "Bell peppers", "Herbs", "Tomato sauce"],
+        instructions: "Slice vegetables, layer over sauce, and bake at 375°F for 45 mins."
+      },
+      {
+        name: "Beef Bourguignon (Julia & Julia)",
+        image: "https://i.imgur.com/bx2npn8.jpg",
+        ingredients: ["Beef", "Red wine", "Carrots", "Onions", "Mushrooms", "Garlic", "Herbs"],
+        instructions: "Sear beef, simmer with wine and vegetables, and cook until tender."
+      },
+      {
+        name: "Butterbeer (Harry Potter)",
+        image: "https://i.imgur.com/PKu4Ucz.jpg",
+        ingredients: ["Cream soda", "Butterscotch syrup", "Whipped cream", "Vanilla extract"],
+        instructions: "Mix soda and syrup, top with cream and enjoy chilled."
+      }
+    ];
+
+    const recipeList = document.getElementById("recipeList");
+    const searchInput = document.getElementById("searchInput");
+
+    function displayRecipes(filter = "") {
+      recipeList.innerHTML = "";
+      recipes
+        .filter(r => r.name.toLowerCase().includes(filter.toLowerCase()))
+        .forEach(recipe => {
+          const card = document.createElement("div");
+          card.className = "card";
+          card.innerHTML = `
+            <img src="${recipe.image}" alt="${recipe.name}">
+            <div class="card-body">
+              <h3>${recipe.name}</h3>
+              <p><strong>Ingredients:</strong></p>
+              <ul>${recipe.ingredients.map(i => `<li>${i}</li>`).join("")}</ul>
+              <p><strong>Instructions:</strong> ${recipe.instructions}</p>
+            </div>
+          `;
+          recipeList.appendChild(card);
+        });
+    }
+
+    function toggleTheme() {
+      document.body.dataset.theme = document.body.dataset.theme === "dark" ? "light" : "dark";
+    }
+
+    searchInput.addEventListener("input", e => {
+      displayRecipes(e.target.value);
+    });
+
+    displayRecipes();
+  </script>
+</body>
+  </html>
